@@ -1,0 +1,72 @@
+{
+  "info": {
+    "name": "Text Classifier API",
+    "description": "AI-assisted text classification (Complaint / Query / Feedback / Other) using Google Gemini.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://127.0.0.1:8000" }
+  ],
+  "item": [
+    {
+      "name": "Classify - Complaint",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "application/json" }
+        ],
+        "body": { "mode": "raw", "raw": "{\n  \"text\": \"I was charged twice for my order and support has not replied in a week.\"\n}" },
+        "url": { "raw": "{{baseUrl}}/api/classify", "host": ["{{baseUrl}}"], "path": ["api", "classify"] }
+      }
+    },
+    {
+      "name": "Classify - Query",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "application/json" }
+        ],
+        "body": { "mode": "raw", "raw": "{\n  \"text\": \"Do you deliver to Pune, and what are the shipping charges?\"\n}" },
+        "url": { "raw": "{{baseUrl}}/api/classify", "host": ["{{baseUrl}}"], "path": ["api", "classify"] }
+      }
+    },
+    {
+      "name": "Classify - Feedback",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "application/json" }
+        ],
+        "body": { "mode": "raw", "raw": "{\n  \"text\": \"The new checkout flow is really smooth, great job! Maybe add UPI as a payment option.\"\n}" },
+        "url": { "raw": "{{baseUrl}}/api/classify", "host": ["{{baseUrl}}"], "path": ["api", "classify"] }
+      }
+    },
+    {
+      "name": "Classify - Other",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "application/json" }
+        ],
+        "body": { "mode": "raw", "raw": "{\n  \"text\": \"hello there\"\n}" },
+        "url": { "raw": "{{baseUrl}}/api/classify", "host": ["{{baseUrl}}"], "path": ["api", "classify"] }
+      }
+    },
+    {
+      "name": "Validation error - missing text",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "application/json" }
+        ],
+        "body": { "mode": "raw", "raw": "{}" },
+        "url": { "raw": "{{baseUrl}}/api/classify", "host": ["{{baseUrl}}"], "path": ["api", "classify"] }
+      }
+    }
+  ]
+}

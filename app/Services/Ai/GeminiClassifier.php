@@ -33,7 +33,10 @@ class GeminiClassifier implements TextClassifier
                 ->timeout($this->timeoutSeconds)
                 ->post($this->endpoint(), $this->payload($text));
         } catch (ConnectionException $e) {
-            throw AiServiceException::timeout($e);
+            // cURL error 28 = operation timed out; anything else (DNS, TLS, refused) is a connectivity problem.
+            throw str_contains($e->getMessage(), 'cURL error 28')
+                ? AiServiceException::timeout($e)
+                : AiServiceException::unreachable($e);
         }
 
         if ($response->failed()) {

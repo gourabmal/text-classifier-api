@@ -30,8 +30,17 @@ class AiServiceException extends RuntimeException
         return new self('AI provider did not respond in time.', 'ai_timeout', 504, $previous);
     }
 
+    public static function unreachable(?Throwable $previous = null): self
+    {
+        return new self('Could not connect to the AI provider.', 'ai_unreachable', 502, $previous);
+    }
+
     public static function upstream(int $providerStatus): self
     {
+        if ($providerStatus === 429) {
+            return new self('AI provider rate limit reached. Please retry shortly.', 'ai_rate_limited', 429);
+        }
+
         return new self("AI provider returned an error (HTTP {$providerStatus}).", 'ai_upstream_error', 502);
     }
 

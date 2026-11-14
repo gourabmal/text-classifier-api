@@ -170,11 +170,29 @@ class ClassifyTextTest extends TestCase
 
     public function test_timeouts_return_504(): void
     {
-        Http::fake(fn () => throw new ConnectionException('Operation timed out'));
+        Http::fake(fn () => throw new ConnectionException('cURL error 28: Operation timed out after 15001 milliseconds'));
 
         $this->postJson('/api/classify', ['text' => 'Hello'])
             ->assertStatus(504)
             ->assertJsonPath('error.code', 'ai_timeout');
+    }
+
+    public function test_connection_failures_return_502(): void
+    {
+        Http::fake(fn () => throw new ConnectionException('cURL error 60: SSL certificate problem'));
+
+        $this->postJson('/api/classify', ['text' => 'Hello'])
+            ->assertStatus(502)
+            ->assertJsonPath('error.code', 'ai_unreachable');
+    }
+
+    public function test_provider_rate_limit_returns_429(): void
+    {
+        $this->geminiReturns(['error' => 'quota'], 429);
+
+        $this->postJson('/api/classify', ['text' => 'Hello'])
+            ->assertStatus(429)
+            ->assertJsonPath('error.code', 'ai_rate_limited');
     }
 
     public function test_missing_api_key_returns_500(): void

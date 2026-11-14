@@ -12,7 +12,7 @@ A small Laravel REST service that uses **Google Gemini** to classify a piece of 
 ## Quick start
 
 ```bash
-git clone <your-repo-url> text-classifier-api
+git clone https://github.com/gourabmal/text-classifier-api.git
 cd text-classifier-api
 composer install
 cp .env.example .env          # Windows PowerShell: Copy-Item .env.example .env

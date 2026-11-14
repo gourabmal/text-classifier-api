@@ -11,15 +11,36 @@ A small Laravel REST service that uses **Google Gemini** to classify a piece of 
 
 ## Quick start
 
+### Requirements
+- **PHP 8.2+** with the `curl`, `mbstring`, `openssl` and `fileinfo` extensions
+- **Composer** (https://getcomposer.org)
+- A free **Gemini API key** (https://aistudio.google.com/apikey)
+
+### 1. Clone the repository
+
 ```bash
 git clone https://github.com/gourabmal/text-classifier-api.git
 cd text-classifier-api
+```
+
+### 2. Install dependencies with Composer
+
+The `vendor/` folder is not committed, so you must install the PHP dependencies first:
+
+```bash
 composer install
+```
+
+### 3. Create the environment file and app key
+
+```bash
 cp .env.example .env          # Windows PowerShell: Copy-Item .env.example .env
 php artisan key:generate
 ```
 
-Open `.env` and set your Gemini key (free from https://aistudio.google.com/apikey):
+### 4. Add your Gemini API key
+
+Open `.env` and set:
 
 ```dotenv
 GEMINI_API_KEY=your-key-here
@@ -27,17 +48,22 @@ GEMINI_MODEL=gemini-2.5-flash   # any Gemini model that supports structured outp
 GEMINI_TIMEOUT=15               # seconds
 ```
 
-Run it:
+### 5. Start the server
 
 ```bash
 php artisan serve               # http://127.0.0.1:8000
 ```
 
-Run the tests (no API key or network needed, because Gemini is faked):
+The running API calls the **real Gemini API** with your key. Try it with the [curl example below](#post-apiclassify) or the Postman collection.
+
+### 6. Run the automated tests (optional)
 
 ```bash
 php artisan test
 ```
+
+The test suite **mocks** Gemini with `Http::fake()`. It needs no API key and no network, gives the same result every run, and can simulate
+failures (timeouts, rate limits, broken output). It uses none of your Gemini quota. The live API was tested separately against the real Gemini; see the real responses below.
 
 ---
 
